@@ -1,8 +1,7 @@
 import fs from 'node:fs/promises';
-
 import { createFakeProduct } from '../utils/createFakeProduct.js';
 import { DB_PATH } from '../constants/products.js';
-import { parse } from 'node:path';
+import { readFile } from '../utils/readFile.js';
 
 const generateProduct = async (productNumber) => {
   const productsList = Array(productNumber)
@@ -10,15 +9,15 @@ const generateProduct = async (productNumber) => {
     .map(() => {
       return createFakeProduct();
     });
-  const data = await fs.readFile(DB_PATH, 'utf8');
-  let newData = [];
-  if (!data) {
-    newData = productsList;
-  } else {
-    newData = [...JSON.parse(data), ...productsList];
-  }
+  
+  const data =  await readFile();
 
-  await fs.writeFile(DB_PATH, JSON.stringify(newData, null, 2));
+  // const newData = [...data, ...productsList];
+
+  data.push(...productsList);
+
+  await fs.writeFile(DB_PATH, JSON.stringify(data, null, 2));
  
 };
+
 generateProduct(5);

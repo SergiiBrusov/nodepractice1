@@ -1,10 +1,11 @@
 import fs from 'node:fs/promises';
 import { createFakeProduct } from '../utils/createFakeProduct.js';
 import { DB_PATH } from '../constants/products.js';
+import { readFile } from '../utils/readFile.js';
+
 
 const addOneProduct = async () => {
-  const productsListJSON = await fs.readFile(DB_PATH, 'utf8');
-  const productsList = JSON.parse(productsListJSON);
+  const productsList = await readFile();
   const newProduct = createFakeProduct();
 
   productsList.push(newProduct);
